@@ -45,12 +45,12 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Convert">
                <items>
-                  <MenuItem mnemonicParsing="false" text="m/s -&gt; km/h" />
-                  <MenuItem mnemonicParsing="false" text="m/s &lt;- km/h" />
-                  <MenuItem mnemonicParsing="false" text="inch -&gt; m" />
-                  <MenuItem mnemonicParsing="false" text="inch &lt;- m" />
-                  <MenuItem mnemonicParsing="false" text="feet -&gt; m" />
-                  <MenuItem mnemonicParsing="false" text="feet &lt;- m" />
+                  <MenuItem mnemonicParsing="false" onAction="#mps2kmph" text="m/s -&gt; km/h" />
+                  <MenuItem mnemonicParsing="false" onAction="#kmph2mps" text="m/s &lt;- km/h" />
+                  <MenuItem mnemonicParsing="false" onAction="#inch2mm" text="inch -&gt; mm" />
+                  <MenuItem mnemonicParsing="false" onAction="#mm2inch" text="inch &lt;- mm" />
+                  <MenuItem mnemonicParsing="false" onAction="#feet2m" text="feet -&gt; m" />
+                  <MenuItem mnemonicParsing="false" onAction="#m2feet" text="feet &lt;- m" />
                </items>
             </Menu>
           <Menu mnemonicParsing="false" text="Help">
