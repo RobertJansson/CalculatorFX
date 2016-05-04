@@ -20,7 +20,7 @@ public class ModelBrain
 		// Those are found in menu of program (see RootLayout).
 		variables.put("PI", Math.PI);
 		variables.put("E", Math.E);
-		variables.put("SoL", 299792458.);	// Speed of light (m/s)
+		variables.put("SOL", 299792458.);	// Speed of light (m/s)
 		variables.put("DEEPTHOUGHT", 42.);	// Ultimate answer
 
 		// Predefined answer variable

@@ -45,38 +45,9 @@ public class CNormalController
 
 		// Initialize a start value of display.
 		// Last session from a plist (or XML as this is Java) would be a nice feature (Controller prepared)
-		display.setText("0");
+		push("0");
 	}
 	
-	/**
-	 * Eraser used with backspace-key
-	 */
-	private void deleteLast(){
-		if (2 > (display.getText().length()))
-			display.setText("0");
-		else	// Dot-notaion-freakshow:
-			display.setText(display.getText().substring(0, display.getText().length()-1));
-	}
-
-	/**
-	 * button(s) is used when a leading 0 should be replaced
-	 * ie "01.."
-	 */
-	private void button(String s) {
-		if (display.getText().equals("0"))
-			display.setText(s);
-		else
-			display.setText(display.getText() + s);
-	}
-
-	/**
-	 * Add is used when a lonely 0 in display is valid
-	 * ie "0-..."
-	 */
-	private void add(String s){
-		display.setText(display.getText() + s);
-	}
-
 	/**
 	 * Called when the user type on keyboard
 	 */
@@ -86,25 +57,25 @@ public class CNormalController
 		log("Key getText: " + ke.getText());
 		
 		switch (ke.getText()){
-		case "0": button("0"); break;
-		case "1": button("1"); break;
-		case "2": button("2"); break;
-		case "3": button("3"); break;
-		case "4": button("4"); break;
-		case "5": button("5"); break;
-		case "6": button("6"); break;
-		case "7": button("7"); break;
-		case "8": button("8"); break;
-		case "9": button("9"); break;
-		case "/": button("/"); break;
-		case "*": button("*"); break;
-		case "-": button("-"); break;
-		case "+": button("+"); break;
-		case ",": button("."); break;
-		case ".": button("."); break;
+		case "0": push("0"); break;
+		case "1": push("1"); break;
+		case "2": push("2"); break;
+		case "3": push("3"); break;
+		case "4": push("4"); break;
+		case "5": push("5"); break;
+		case "6": push("6"); break;
+		case "7": push("7"); break;
+		case "8": push("8"); break;
+		case "9": push("9"); break;
+		case "/": push("/"); break;
+		case "*": push("*"); break;
+		case "-": push("-"); break;
+		case "+": push("+"); break;
+		case ",": push("."); break;
+		case ".": push("."); break;
 		default:
 			switch (ke.getCode().toString()){
-				case "ENTER": evaluate (display.getText()); break;
+				case "ENTER": eval (display.getText()); break;
 				case "BACK_SPACE": deleteLast(); break;
 				case "ESCAPE": display.setText("0"); break;
 				default: break;
@@ -115,34 +86,62 @@ public class CNormalController
 	/**
 	 * Called when the user clicks a button
 	 */
-	@FXML private void b0() { button("0"); }
-	@FXML private void b1() { button("1"); }
-	@FXML private void b2() { button("2"); }
-	@FXML private void b3() { button("3"); }
-	@FXML private void b4() { button("4"); }
-	@FXML private void b5() { button("5"); }
-	@FXML private void b6() { button("6"); }
-	@FXML private void b7() { button("7"); }
-	@FXML private void b8() { button("8"); }
-	@FXML private void b9() { button("9"); }
-	@FXML private void divide()		{ add("/"); }
-	@FXML private void multiply()	{ add("*"); }
-	@FXML private void subtract()	{ add("-"); }
-	@FXML private void add()		{ add("+"); }
-	@FXML private void comma() 		{ add("."); }
+	@FXML private void b0() { push("0"); }
+	@FXML private void b1() { push("1"); }
+	@FXML private void b2() { push("2"); }
+	@FXML private void b3() { push("3"); }
+	@FXML private void b4() { push("4"); }
+	@FXML private void b5() { push("5"); }
+	@FXML private void b6() { push("6"); }
+	@FXML private void b7() { push("7"); }
+	@FXML private void b8() { push("8"); }
+	@FXML private void b9() { push("9"); }
+	@FXML private void divide()		{ append("/"); }
+	@FXML private void multiply()	{ append("*"); }
+	@FXML private void subtract()	{ append("-"); }
+	@FXML private void add()		{ append("+"); }
+	@FXML private void comma() 		{ append("."); }
 	@FXML private void clear()		{ display.setText("0"); }
 	@FXML private void plusMinus()	{ display.setText("-" + display.getText()); }
-	@FXML private void percent()	{ evaluate (display.getText() + "*100");}
-	@FXML private void compute()	{ evaluate (display.getText()); }
+	@FXML private void percent()	{ eval(display.getText() + "*100");}
+	@FXML private void compute()	{ eval(display.getText()); }
 
-	private void evaluate(String toEvaluate) {
-		Double result = mainApp.evaluate(toEvaluate);
-		if (Double.isFinite(result)) {
-			String s = result.toString();
-			if (s.substring(s.length()-2, s.length()).equals(".0")) // Trunc .0
-				display.setText(s.substring(0, s.length()-2));
-			else
-				display.setText(result.toString());
-		}
+	/**
+	 * Tell controller to evaluate our expression
+ 	 * Public: To let mainApp start an evaluation (menubar conversions)
+	 */
+	public void eval(String expression) {
+		display.setText(mainApp.evaluate(expression));
+	}
+
+	/**
+	 * Used when a leading 0 should be kept
+	 * ie "0-.."
+	 */
+	private void append(String expression){
+		display.setText(display.getText() + expression);
+	}
+
+	/**
+	 * Used when a leading 0 should be replaced
+	 * ie "01.."
+	 * Public: To let mainApp add variables
+	 */
+	public String push(String expression) {
+		if (display.getText().equals("0"))
+			display.setText(expression);
+		else
+			display.setText(display.getText() + expression);
+		return new String(display.getText());
+	}
+
+	/**
+	 * Eraser (backspace)
+	 */
+	private void deleteLast(){
+		if (2 > (display.getText().length()))
+			display.setText("0");
+		else
+			display.setText(display.getText().substring(0, display.getText().length()-1));
 	}
 }
