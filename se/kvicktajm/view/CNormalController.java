@@ -137,10 +137,12 @@ public class CNormalController
 
 	private void evaluate(String toEvaluate) {
 		Double result = mainApp.evaluate(toEvaluate);
-		if (Double.isFinite(result))
-			if (result.toString().equals("0.0"))
-				display.setText("0");
+		if (Double.isFinite(result)) {
+			String s = result.toString();
+			if (s.substring(s.length()-2, s.length()).equals(".0")) // Trunc .0
+				display.setText(s.substring(0, s.length()-2));
 			else
 				display.setText(result.toString());
+		}
 	}
 }
