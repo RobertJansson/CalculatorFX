@@ -17,5 +17,4 @@ CAdvanced can be toggled on/off in the File-menu. The buttons in the advanced pa
 ModelBrain.java - The model of CalculatorFX.<br>
 Evaluation.java - A backtracking recursive parser, called by the model to perform an evaluation.
 <p>
-The program is configured to use aguafx (http://aquafx-project.com) so that the programs menubar is moved from the window into the menubar of the computer.<br>
-The constructor in CalculatorFX.java has a note what to change if that is not used.
+The program is configured to use aguafx (http://aquafx-project.com) so that the programs menubar is moved from the window into the menubar of the computer. The constructor in CalculatorFX.java has a note what to change if that is not used.
