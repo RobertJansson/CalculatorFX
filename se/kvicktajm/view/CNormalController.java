@@ -10,31 +10,26 @@ public class CNormalController
 	// Simple debug flag:
 	private static final boolean LOG = false;
 
-	// Display of the calculator
-	@FXML
-	private Label display;
-
-	// Reference to the main application.
-	private CalculatorFX mainApp;
+	@FXML private Label display;		// Display of the calculator
+	private CalculatorFX mainApp;		// Reference to the main application.
 
 	/**
-	 * The constructor.
 	 * The constructor is called before the initialize() method.
 	 */
-	public CNormalController() {
-		display = new Label("");
-	}
+	public CNormalController() { display = new Label(""); }
 	
-	private void log(String s){
-		if (LOG) System.out.println(s);
-	}
+
+	/**
+	 * Private method for debugging.
+	 * @param s is the String to print to console
+	 */
+	private void log(String s){ if (LOG) System.out.println(s); }
 
 	/**
 	 * Initializes the controller class. This method is automatically called
 	 * after the fxml file has been loaded.
 	 */
-	@FXML
-	private void initialize() {	}
+	@FXML private void initialize() {	}
 
 	/**
 	 * Called by the main application to give a reference back to itself.
@@ -42,11 +37,13 @@ public class CNormalController
 	 */
 	public void setMainApp(CalculatorFX mainApp) {
 		this.mainApp = mainApp;
-
-		// Initialize a start value of display.
-		// Last session from a plist (or XML as this is Java) would be a nice feature (Controller prepared)
-		push("0");
+		push("0"); 		// Initialize a start value of display.
+						// Last session from a plist (or XML as this is Java)
+						// would be a nice feature (Controller prepared)
 	}
+	
+	// Getters:
+	public String getDisplay(){ return display.getText(); }
 	
 	/**
 	 * Called when the user type on keyboard
@@ -57,6 +54,12 @@ public class CNormalController
 		log("Key getText: " + ke.getText());
 		
 		switch (ke.getText()){
+		case "c": push("cos("); break;
+		case "e": push("exp("); break;
+		case "l": push("log("); break;
+		case "P": push("PI"); break;
+		case "s": push("sin("); break;
+		case "t": push("tan("); break;
 		case "0": push("0"); break;
 		case "1": push("1"); break;
 		case "2": push("2"); break;
@@ -73,11 +76,14 @@ public class CNormalController
 		case "+": push("+"); break;
 		case ",": push("."); break;
 		case ".": push("."); break;
+		case "(": push("("); break;
+		case ")": push(")"); break;
 		default:
 			switch (ke.getCode().toString()){
 				case "ENTER": eval (display.getText()); break;
 				case "BACK_SPACE": deleteLast(); break;
 				case "ESCAPE": display.setText("0"); break;
+				case "SPACE": display.setText("0"); break;
 				default: break;
 			}
 		}
