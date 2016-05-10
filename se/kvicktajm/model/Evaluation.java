@@ -28,8 +28,16 @@ public class Evaluation
 		functions = new TreeSet<String>();  
 		functions.add("sin");
 		functions.add("cos");
+		functions.add("tan");
 		functions.add("exp");
-		functions.add("log");   
+		functions.add("log");
+		functions.add("ln");
+		functions.add("sqrt");
+		functions.add("cbrt");
+		functions.add("sqpow");
+		functions.add("cbpow");
+		functions.add("Rand");
+		functions.add("EE");
 	}
 
 	/**
@@ -108,10 +116,18 @@ public class Evaluation
 		switch (str) {
 			case "cos": return Math.cos(Math.toRadians(value));
 			case "sin": return Math.sin(Math.toRadians(value));
+			case "tan": return Math.tan(Math.toRadians(value));
 //			case "cos": return Math.cos(value);
 //			case "sin": return Math.sin(value);
 			case "exp": return Math.exp(value);
-			case "log": return Math.log(value);
+			case "log": return Math.log10(value);
+			case "ln": return Math.log(value);
+			case "sqrt": return Math.sqrt(value);
+			case "cbrt": return Math.cbrt(value);
+			case "sqpow": return Math.pow(value,2);
+			case "cbpow": return Math.pow(value,3);
+			case "Rand": return Math.random()*value;
+			case "EE": return Math.pow(10,value);
 			default: throw new SyntaxException(str + " is a function not implemented in funcion()");
 		}
 	}

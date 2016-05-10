@@ -7,17 +7,19 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 
 import javafx.application.Application;
+//import javafx.collections.FXCollections;
+//import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-
 import se.kvicktajm.CalculatorFX;
 import se.kvicktajm.model.ModelBrain;
 import se.kvicktajm.view.CAdvancedController;
 import se.kvicktajm.view.CMenuController;
 import se.kvicktajm.view.CNormalController;
+import se.kvicktajm.view.CTapeController;
 
 public class CalculatorFX extends Application
 {
@@ -25,14 +27,23 @@ public class CalculatorFX extends Application
 	private BorderPane rootLayout;
 	private ModelBrain model;
 	private CNormalController display;
+	private CTapeController tape;
+//	private ObservableList<String> list;
 
+	// Initiate the JavaFX launch-sequence
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	// Come back and finish the JavaFX launch-sequence
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Caclulator");
 		this.model = new ModelBrain();
-		AquaFx.style();					// OS X adaption - comment this out and you must
-		initRootLayout();				// ...change height of root window: 360 -> 389
+//		list = FXCollections.observableArrayList();
+		AquaFx.style();				// OS X adaption - comment this out and you must
+		initRootLayout();			// ...change height of root window: 360 -> 389
 		showNormalView();
 	}
 
@@ -41,7 +52,6 @@ public class CalculatorFX extends Application
 	 */
 	private void initRootLayout() {
 		try {
-			// Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(CalculatorFX.class.getResource("view/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
@@ -49,9 +59,6 @@ public class CalculatorFX extends Application
 			// Show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
-
-			// Give the menu controller access to the main app.
-			// Require controller to be set in FXML
 			CMenuController controller = loader.getController();
 			controller.setMainApp(this);
 			primaryStage.show();
@@ -61,27 +68,26 @@ public class CalculatorFX extends Application
 		}
 	}
 
-	public void showNormalView() {
+	/**
+	 * Initializes the root layout.
+	 */
+	private void showNormalView() {
 		try {
-			// Load normal calculator view
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(CalculatorFX.class.getResource("view/CNormal.fxml"));
 			AnchorPane normalView = (AnchorPane) loader.load();
-
-			// Set normal calculator view into the center of root layout.
 			rootLayout.setCenter(normalView);
-
-			// Give the controller access to the main app.
-			// Require controller to be set in FXML
 			CNormalController controller = loader.getController();
 			controller.setMainApp(this);
-			display = controller;	// From now we use it to update the display
+			display = controller;			// Save reference to display
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	/* Advanced view */
+	
 	public void toggleAdvanced() {
 		if (rootLayout.getLeft() == null)
 			showAdvancedView();
@@ -97,20 +103,13 @@ public class CalculatorFX extends Application
 
 	private void showAdvancedView() {
 		try {
-			// Load normal calculator view
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(CalculatorFX.class.getResource("view/CAdvanced.fxml"));
 			AnchorPane advancedView = (AnchorPane) loader.load();
-
-			// Set normal calculator view into the center of root layout.
 			primaryStage.setWidth(800);
 			rootLayout.setLeft(advancedView);
-
-			// Give the controller access to the main app.
-			// Require controller to be set in FXML
 			CAdvancedController controller = loader.getController();
-			controller.setMainApp(this);
-
+			controller.setMainApp(this, display);
 			this.primaryStage.setTitle("Advanced caclulator");
 
 		} catch (IOException e) {
@@ -118,14 +117,46 @@ public class CalculatorFX extends Application
 		}
 	}
 
-	// This is called from viewers
+	/* Tape view -should be converted into an ObservableList */
+
+	public void toggleTapeView() {
+		if (rootLayout.getBottom() == null)
+			showTapeView();
+		else
+			hideTapeView();
+	}
+
+	private void hideTapeView() {
+		rootLayout.setBottom(null);
+		primaryStage.setHeight(382);
+	}
+
+	private void showTapeView() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(CalculatorFX.class.getResource("view/CTape.fxml"));
+			AnchorPane tapeView = (AnchorPane) loader.load();
+			primaryStage.setHeight(582);
+			rootLayout.setBottom(tapeView);
+			tape = loader.getController();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*							*/
+	/*	Business intelligense	*/
+	/*							*/
+	
 	public String evaluate(String s){
-		// throws SyntaxException, EvalException, IOException{
-		// System.out.println("String to evaluate: '" + s + "'");
 		Double result = model.evaluate(s);
 		String rs = result.toString();
 		if (rs.substring(rs.length()-2, rs.length()).equals(".0")) // Trunc .0
 			rs = rs.substring(0, rs.length()-2);
+		if (tape != null){
+			tape.updateTape(s + " = " + rs + "\n");
+		}
 		return rs;
 	}
 	
@@ -137,10 +168,8 @@ public class CalculatorFX extends Application
 		display.eval(display.push(expression));
 	}
 
-	public static void main(String[] args) {
-		launch(args);
-	}
-
+	/* File management - not yet implemented */
+	
 	/**
 	 * Returns the person file preference, i.e. the file that was last opened.
 	 * The preference is read from the OS specific registry. If no such
@@ -151,6 +180,7 @@ public class CalculatorFX extends Application
 	public File getCalculatorPlistPath() {
 		Preferences prefs = Preferences.userNodeForPackage(CalculatorFX.class);
 		String filePath = prefs.get("filePath", null);
+		System.out.println(filePath);
 		if (filePath != null) {
 			return new File(filePath);
 		} else {
@@ -167,12 +197,10 @@ public class CalculatorFX extends Application
 		Preferences prefs = Preferences.userNodeForPackage(CalculatorFX.class);
 		if (file != null) {
 			prefs.put("filePath", file.getPath());
-
 			// Update the stage title.
 			primaryStage.setTitle("Calculator - " + file.getName());
 		} else {
 			prefs.remove("filePath");
-
 			// Update the stage title.
 			primaryStage.setTitle("Calculator");
 		}
