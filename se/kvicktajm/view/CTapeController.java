@@ -1,8 +1,8 @@
 package se.kvicktajm.view;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 //import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextArea;
 
 public class CTapeController
 {
@@ -11,10 +11,7 @@ public class CTapeController
 
 	// Display of the calculator
 	@FXML
-	private Label display;
-
-//	// Reference to the main application.
-//	private CalculatorFX mainApp;
+	private TextArea tape;
 
 	/**
 	 * The constructor.
@@ -23,9 +20,10 @@ public class CTapeController
 	public CTapeController() {
 	}
 
-	private void log(String s){
-		if (LOG) System.out.println(s);
-	}
+	/**
+	 * Private method for simple debugging
+	 */
+	private void log(String s) {if (LOG) System.out.println(s); }
 
 	/**
 	 * Initializes the controller class. This method is automatically called
@@ -39,6 +37,7 @@ public class CTapeController
 	 */
 	public void updateTape(String str){
 		log("Update tape: " + str);
+		this.tape.appendText(str);
 //		this.tape.setTextFormatter(new TextFormatter());
 	}
 }

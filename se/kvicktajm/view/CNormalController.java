@@ -12,6 +12,7 @@ public class CNormalController
 
 	@FXML private Label display;		// Display of the calculator
 	private CalculatorFX mainApp;		// Reference to the main application.
+	private static boolean cmd;
 
 	/**
 	 * The constructor is called before the initialize() method.
@@ -54,30 +55,30 @@ public class CNormalController
 		log("Key getText: " + ke.getText());
 		
 		switch (ke.getText()){
-		case "c": push("cos("); break;
-		case "e": push("exp("); break;
-		case "l": push("log("); break;
-		case "P": push("PI"); break;
-		case "s": push("sin("); break;
-		case "t": push("tan("); break;
-		case "0": push("0"); break;
-		case "1": push("1"); break;
-		case "2": push("2"); break;
-		case "3": push("3"); break;
-		case "4": push("4"); break;
-		case "5": push("5"); break;
-		case "6": push("6"); break;
-		case "7": push("7"); break;
-		case "8": push("8"); break;
-		case "9": push("9"); break;
-		case "/": push("/"); break;
-		case "*": push("*"); break;
-		case "-": push("-"); break;
-		case "+": push("+"); break;
-		case ",": push("."); break;
-		case ".": push("."); break;
-		case "(": push("("); break;
-		case ")": push(")"); break;
+		case "c": if (!cmd) push("cos("); break;
+		case "e": if (!cmd) push("exp("); break;
+		case "l": if (!cmd) push("log("); break;
+		case "P": if (!cmd) push("PI"); break;
+		case "s": if (!cmd) push("sin("); break;
+		case "t": if (!cmd) push("tan("); break;
+		case "0": if (!cmd) push("0"); break;
+		case "1": if (!cmd) push("1"); break;
+		case "2": if (!cmd) push("2"); break;
+		case "3": if (!cmd) push("3"); break;
+		case "4": if (!cmd) push("4"); break;
+		case "5": if (!cmd) push("5"); break;
+		case "6": if (!cmd) push("6"); break;
+		case "7": if (!cmd) push("7"); break;
+		case "8": if (!cmd) push("8"); break;
+		case "9": if (!cmd) push("9"); break;
+		case "/": if (!cmd) push("/"); break;
+		case "*": if (!cmd) push("*"); break;
+		case "-": if (!cmd) push("-"); break;
+		case "+": if (!cmd) push("+"); break;
+		case ",": if (!cmd) push("."); break;
+		case ".": if (!cmd) push("."); break;
+		case "(": if (!cmd) push("("); break;
+		case ")": if (!cmd) push(")"); break;
 		default:
 			switch (ke.getCode().toString()){
 				case "ENTER": eval (display.getText()); break;
@@ -86,6 +87,11 @@ public class CNormalController
 				case "SPACE": display.setText("0"); break;
 				default: break;
 			}
+		}
+		if (ke.getCode().toString().equals("COMMAND")){
+			cmd = true;					log("Command");
+		} else {
+			cmd = false;				log("No command");
 		}
 	}
 
