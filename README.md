@@ -1,6 +1,8 @@
 # CalculatorFX
 Uppsala University P2 - Lab4<br>
-JavaFX8-version of my calculator using strict MVC (and FXML)<p>
+JavaFX8-version of my calculator using MVC and FXML<p>
+CalculatorFX has been compiled into a program:<br>
+OS X: <A HREF=https://kvicktajm.se/apps/osx/CalculatorFX.dmg>CalculatorFX.dmg</A><br>
 
 <p><b>Controller</b><br>
 CalculatorFX.java - The main controller.
