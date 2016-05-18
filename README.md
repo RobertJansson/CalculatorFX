@@ -21,5 +21,7 @@ Evaluation.java - A backtracking recursive descent, called by the model to perfo
 <p>
 Note: Evaluations start at CNormalController <-> CNormalController <-> ModelBrain <-> Evaluation (where dive begins)
 <p>
-Tooling: Java 8 and an IDE with JavaFX. For Eclipse, update everything and go here for e(fx)clipse toolset: http://www.eclipse.org/efxclipse/install.html<br>
+Tooling: Java 8 and an IDE with JavaFX. For Eclipse, update everything and go here for e(fx)clipse toolset:<br> http://www.eclipse.org/efxclipse/install.html<br>
+You would also want to install SceneBuilder. Oracle messed up the distribution but here is a better source:<br>
+http://gluonhq.com/open-source/scene-builder/<p>
 CalculatorFX is also using aguafx (http://aquafx-project.com). That move the programs menubar from its window into the menubar of the computer. The constructor in CalculatorFX.java (or FX8-start method) has a note what to change if that is not used. Menu bar height of 29 pixels must be added to viewer.
